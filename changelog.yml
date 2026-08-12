@@ -1,3 +1,23 @@
+4.8.2: |
+  More wishlist fixes:
+  - fixed ITAD price info in wishlists
+  - fixed hidden games in wishlist stats, only games that are actually unlisted will show up now (thanks przemo20)
+  - removed wishlist ranking feature (made obsolete by Steam)
+  - added support for restoring price cut - let me know how well this works for you, it's not as straightforward as on app pages
+
+4.8.1: |
+  Just after I pushed hotfix, Steam broke wishlists again for us by adding new features. So we're hotfixing twice in the same day.
+  
+  It's entirely possible that there will be some minor changes by Steam in the next few days if they find some issues with new features.
+  If that happens and it breaks again, I might wait a little bit for it to settle down before fixing it in Augmented Steam,
+  so I'll ask you for patience :)
+  
+4.8.0: |
+  Hotfix wishlist after Steam's breaking change.
+  
+  Version bump is due to updated manifest requirements from Mozilla, where we now ask you for data collection consent
+  before you connect Augmented Steam with IsThereAnyDeal. 
+
 4.7.0: |
   - fixed inventory quick sell buttons after Steam's breaking change
   - refactored custom links to use their own box on app pages, instead of Steam's report/share (#2324)

@@ -7,7 +7,8 @@ interface TDOMGame {
     title?: {
         node: HTMLElement,
         value: string|null,
-    }
+    },
+    categories: HTMLElement|null
 }
 
 interface TDOMStructure {
@@ -29,14 +30,14 @@ export class WishlistDOM {
 
     private update() {
 
-        const parent = document.querySelector<HTMLElement>("section.GHIW6-Wf1rQ-");
+        const parent = document.querySelector<HTMLElement>("section.jGMVnjZbmZM-");
         if (!parent) {
             console.error("Didn't find parent");
             this.dom = {};
             return;
         }
 
-        const gameList = parent.querySelector<HTMLElement>(".PU7fdVEQB8s-.Panel");
+        const gameList = parent.querySelector<HTMLElement>(".PLkUpk974nY-.Panel");
         if (!gameList) {
             console.error("Didn't find gameList");
             this.dom = {};
@@ -44,9 +45,10 @@ export class WishlistDOM {
         }
 
         const games: TDOMGame[] = [];
-        for (const gameNode of gameList.querySelectorAll<HTMLElement>(".c-Pw-ER6JnA-.Panel")) {
+        for (const gameNode of gameList.querySelectorAll<HTMLElement>(".PE-3oq-yIvg-.Panel")) {
             const game: TDOMGame = {
-                node: gameNode
+                node: gameNode,
+                categories: this.categoriesNode(gameNode)
             };
 
             const titleNode = this.titleNode(gameNode);
@@ -74,8 +76,45 @@ export class WishlistDOM {
         });
     }
 
+    gameNode(parent: HTMLElement): HTMLDivElement {
+        return parent.querySelector(".PE-3oq-yIvg-")!;
+    }
+
     titleNode(parent: HTMLElement): HTMLAnchorElement|null {
-        return parent.querySelector<HTMLAnchorElement>("a.pOyXxbQoV38-[href*='/app/']");
+        return parent.querySelector<HTMLAnchorElement>("a.I8vuMMV-osE-[href*='/app/']");
+    }
+
+    categoriesNode(parent: HTMLElement): HTMLAnchorElement|null {
+        return parent.querySelector<HTMLAnchorElement>(".lZzQoZsDjew-");
+    }
+
+    priceNodes(parent: HTMLElement): {
+        normal: HTMLElement|null,
+        icon: HTMLElement|null,
+        current: HTMLElement|null,
+        replacer: (cut: number) => void
+    } {
+        const parentPriceNode = parent.querySelector<HTMLElement>("._5obTMJByPr0-");
+        const normalPriceNode = parentPriceNode?.querySelector<HTMLElement>(".sNExYpOoTBo- .r4XxdUG9Bg0-") ?? null;
+        const cutIconNode = parentPriceNode?.querySelector<HTMLElement>(".rsMD9WnTopA-.OaA5Hz-VGBw-") ?? null;
+        const currentNode = parentPriceNode?.querySelector<HTMLElement>(".-HQzBzl6lqI-") ?? null;
+        const replacer = (cut: number) => {
+            if (!cutIconNode) { return; }
+            cutIconNode.classList.remove("OaA5Hz-VGBw-");
+
+            const node = document.createElement("div");
+            node.classList.add("hPiY1A-1izA-");
+            node.innerText = `-${cut}%`;
+
+            cutIconNode.replaceChildren(node);
+        }
+
+        return {
+            normal: normalPriceNode,
+            icon: cutIconNode,
+            current: currentNode,
+            replacer
+        }
     }
 
     appid(anchorNode: HTMLAnchorElement): AppId|null {

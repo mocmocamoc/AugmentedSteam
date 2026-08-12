@@ -1,4 +1,3 @@
-import FAlternativeLinuxIcon from "../Common/FAlternativeLinuxIcon";
 import FWishlistHighlights from "./FWishlistHighlights";
 import FWishlistITADPrices from "./FWishlistITADPrices";
 import FWishlistUserNotes from "./FWishlistUserNotes";
@@ -10,12 +9,10 @@ import Context, {type ContextParams} from "@Content/Modules/Context/Context";
 import SteamFacade from "@Content/Modules/Facades/SteamFacade";
 import {WishlistDOM} from "@Content/Features/Store/Wishlist/Utils/WishlistDOM";
 import type {TReactQueryData} from "@Content/Features/_types";
-import FShowRanking from "@Content/Features/Store/Wishlist/FShowRanking";
 import Long from "long";
 import ServiceFactory from "@Protobufs/ServiceFactory";
-import WebRequestListener from "@Content/Modules/WebRequest/WebRequestListener";
 import ASEventHandler from "@Content/Modules/ASEventHandler";
-import Settings from "@Options/Data/Settings";
+import FWishlistRestorePriceCut from "@Content/Features/Store/Wishlist/FWishlistRestorePriceCut";
 
 export interface WishlistEntry {
     appid: number,
@@ -55,27 +52,19 @@ export default class CWishlist extends Context {
 
     /* TODO private */ constructor(params: ContextParams, ownerId: string, wishlistData: WishlistEntry[]) {
         super(params, ContextType.WISHLIST, [
-            FAlternativeLinuxIcon,
+            // FAlternativeLinuxIcon,
             FWishlistHighlights,
             FWishlistITADPrices,
             FWishlistUserNotes,
             FWishlistStats,
             FEmptyWishlist,
             FExportWishlist,
-            FShowRanking
+            FWishlistRestorePriceCut
         ]);
 
         this.ownerId = ownerId;
         this.wishlistData = wishlistData;
         this.dom = new WishlistDOM();
-
-        if (Settings.show_wishlist_ranking && this.isMyWishlist) {
-            WebRequestListener.onComplete("reorder", ["https://store.steampowered.com/wishlist/action"],
-                async (_url: string) => {
-                    await this.reloadWishlistData();
-                    this.onReorder.dispatch();
-                });
-        }
 
         this.dom.observe();
     }
